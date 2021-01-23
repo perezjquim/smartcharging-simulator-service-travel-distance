@@ -4,7 +4,8 @@ from nameko.rpc import rpc
 from model.exceptions import NotFound
 
 import json
-import random
+
+import tensorflow as tf
 
 class ModelService:
 
@@ -17,9 +18,30 @@ class ModelService:
 
     @rpc
     def get_travel_distance(self):
-    	min_travel_distance = self.TRAVEL_DISTANCE_AVG - self.TRAVEL_DISTANCE_STDDEV
-    	max_travel_distance = self.TRAVEL_DISTANCE_AVG + self.TRAVEL_DISTANCE_STDDEV
-    	travel_distance = random.uniform( min_travel_distance, max_travel_distance )
-    	
-    	response = json.dumps({'travel_distance': travel_distance})
-    	return response
+        travel_distance = self.generate_travel_distance()
+        response = json.dumps({'travel_distance': travel_distance})
+        return response
+
+    def generate_travel_distance(self):
+        shape = [1,1]
+        min_travel_distance = self.TRAVEL_DISTANCE_AVG - self.TRAVEL_DISTANCE_STDDEV
+        max_travel_distance = self.TRAVEL_DISTANCE_AVG + self.TRAVEL_DISTANCE_STDDEV
+
+        tf_random = tf.random.uniform(
+                shape=shape,
+                minval=min_travel_distance,
+                maxval=max_travel_distance,
+                dtype=tf.dtypes.float32,
+                seed=None,
+                name=None
+        )
+        tf_var = tf.Variable( tf_random )
+
+        tf_init = tf.initialize_all_variables()
+        tf_session = tf.Session()
+        tf_session.run(tf_init)
+
+        tf_return = tf_session.run(tf_var)
+        travel_distance = tf_return[ 0 ][ 0 ]
+
+        return travel_distance
