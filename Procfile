@@ -1,1 +1,1 @@
-web: make run-nameko-model1
+web: make run-nameko-model
