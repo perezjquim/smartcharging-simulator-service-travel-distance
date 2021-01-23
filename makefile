@@ -4,6 +4,8 @@ PATTERN_END=««««««««««««««««««««««««««««««««««
 
 BUILDPACK_BUILDER=heroku/buildpacks:18
 
+SIMULATOR_NETWORK_NAME=net_energysim
+
 MODEL_NAME=model1
 
 MODEL1_PACK_NAME=pack_energysim_model1
@@ -12,7 +14,6 @@ MODEL1_BACKDOOR=3000
 MODEL1_PORTS=8001:8000
 
 RABBIT_CONTAINER_NAME=cont_energysim_rabbitmq
-RABBIT_NETWORK_NAME=net_rabbitmq
 RABBIT_USER=guest
 RABBIT_PASSWORD=guest
 RABBIT_PORT=5672
@@ -38,7 +39,7 @@ start-docker-model1:
 
 	@docker run -d \
 	--name $(MODEL1_CONTAINER_NAME) \
-	--network $(RABBIT_NETWORK_NAME) \
+	--network $(SIMULATOR_NETWORK_NAME) \
 	-e RABBIT_USER=$(RABBIT_USER) \
 	-e RABBIT_PASSWORD=$(RABBIT_PASSWORD) \
 	-e RABBIT_HOST=$(RABBIT_CONTAINER_NAME) \
