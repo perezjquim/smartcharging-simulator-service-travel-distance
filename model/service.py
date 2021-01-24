@@ -42,6 +42,6 @@ class ModelService:
         tf_session.run(tf_init)
 
         tf_return = tf_session.run(tf_var)
-        travel_distance = tf_return[ 0 ][ 0 ]
+        travel_distance = float( tf_return[ 0 ][ 0 ] )
 
         return travel_distance
