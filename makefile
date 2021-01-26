@@ -29,7 +29,11 @@ run-docker-model: stop-docker-model build-docker-model start-docker-model
 build-docker-model:
 	@echo '$(PATTERN_BEGIN) BUILDING `$(MODEL_NAME)` PACK...'
 
-	@pipreqs ./ --force
+	@pipreqs --savepath requirements.txt.tmp
+	@if cmp -s "requirements.txt.tmp" "requirements.txt"; then : ; \
+	else pipreqs ./ --force; fi
+	@rm requirements.txt.tmp
+
 	@pack build $(MODEL_PACK_NAME) \
 	--builder $(BUILDPACK_BUILDER) \
 	--env PIP_DEFAULT_TIMEOUT=$(BUILDPACK_PIP_DEFAULT_TIMEOUT)
