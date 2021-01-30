@@ -30,15 +30,18 @@ build-docker-model:
 	@echo '$(PATTERN_BEGIN) BUILDING `$(MODEL_NAME)` PACK...'
 
 	@pipreqs --force --savepath requirements.txt.tmp
+	@sed -i 's/tensorflow/tensorflow-cpu/g' requirements.txt.tmp
 	@sort -r requirements.txt.tmp > requirements.txt.tmp.sorted
 	@if cmp -s requirements.txt.tmp.sorted requirements.txt; then :;\
 	else cp -f requirements.txt.tmp.sorted requirements.txt; fi
 	@rm -f requirements.txt.tmp
 	@rm -f requirements.txt.tmp.sorted
-
+	
 	@pack build $(MODEL_PACK_NAME) \
 	--builder $(BUILDPACK_BUILDER) \
-	--env PIP_DEFAULT_TIMEOUT=$(BUILDPACK_PIP_DEFAULT_TIMEOUT)
+	--env PIP_DEFAULT_TIMEOUT=$(BUILDPACK_PIP_DEFAULT_TIMEOUT) \
+	--pull-policy if-not-present \
+	--verbose
 
 	@echo '$(PATTERN_END) `$(MODEL_NAME)` PACK BUILT!'
 
