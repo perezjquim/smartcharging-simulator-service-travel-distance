@@ -18,7 +18,7 @@ class ModelService:
 
     @rpc
     def get_distance( self ):
-        travel_distance = self.generate_travel_distance( )
+        travel_distance = self.generate_distance( )
         response = json.dumps( { 'travel_distance': travel_distance } )
         return response
 
