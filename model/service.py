@@ -31,7 +31,7 @@ class ModelService:
                 shape=shape,
                 minval=min_travel_distance,
                 maxval=max_travel_distance,
-                dtype=tf.dtypes.float32,
+                dtype=tf.float32,
                 seed=None,
                 name=None
         )
